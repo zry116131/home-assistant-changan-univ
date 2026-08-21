@@ -1,0 +1,64 @@
+{
+  "title": "长安 UNI-V",
+  "config": {
+    "step": {
+      "user": {
+        "title": "设置长安 UNI-V",
+        "description": "先安装只读车辆实体。账户认证将在下一阶段完成，当前不会启用任何车辆控制。",
+        "data": {
+          "display_name": "车辆名称",
+          "scan_interval": "云端轮询间隔（秒）"
+        }
+      },
+      "reconfigure": {
+        "title": "导入已验证的账户会话",
+        "description": "这是临时验证入口。请勿分享这些内容，也不要粘贴到自有 Home Assistant 以外的任何位置。",
+        "data": {
+          "access_token": "访问令牌",
+          "car_id": "车辆标识",
+          "refresh_token": "刷新令牌（可选）",
+          "vcs_app_id": "VCS 应用标识（可选）",
+          "is_nev": "新能源车标记（可选）"
+        }
+      },
+      "reauth_confirm": {
+        "title": "重新认证长安账户",
+        "description": "账户会话已经失效。请导入新验证的会话；完成协议验证后，这里会替换为图片验证码和短信验证码登录流程。",
+        "data": {
+          "access_token": "访问令牌",
+          "car_id": "车辆标识",
+          "refresh_token": "刷新令牌（可选）",
+          "vcs_app_id": "VCS 应用标识（可选）",
+          "is_nev": "新能源车标记（可选）"
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "仅支持一个长安 UNI-V 配置。",
+      "reauth_successful": "账户会话已成功更新。",
+      "reconfigure_successful": "配置已成功更新。"
+    }
+  },
+  "entity": {
+    "sensor": {
+      "fuel_percent": {"name": "剩余油量"},
+      "remaining_range": {"name": "剩余续航"},
+      "odometer": {"name": "总里程"},
+      "cabin_temperature": {"name": "车内温度"},
+      "exterior_temperature": {"name": "车外温度"},
+      "fuel_liters": {"name": "剩余油量体积"},
+      "fuel_consumption": {"name": "百公里油耗"},
+      "battery_voltage": {"name": "12V 电瓶电压"},
+      "tire_pressure_fl": {"name": "左前轮胎压"},
+      "tire_pressure_fr": {"name": "右前轮胎压"},
+      "tire_pressure_rl": {"name": "左后轮胎压"},
+      "tire_pressure_rr": {"name": "右后轮胎压"},
+      "vehicle_reported_at": {"name": "车辆上报时间"}
+    },
+    "binary_sensor": {
+      "authentication_required": {"name": "账户需要认证"},
+      "engine_running": {"name": "发动机运行"},
+      "air_conditioner": {"name": "空调运行"}
+    }
+  }
+}

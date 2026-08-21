@@ -1,0 +1,64 @@
+{
+  "title": "Changan UNI-V",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Set up Changan UNI-V",
+        "description": "Install the read-only vehicle entities first. Account authentication is completed in the next phase; no vehicle control is enabled.",
+        "data": {
+          "display_name": "Vehicle name",
+          "scan_interval": "Cloud polling interval (seconds)"
+        }
+      },
+      "reconfigure": {
+        "title": "Import verified account session",
+        "description": "Temporary verification path. Do not share these values or paste them anywhere other than your own Home Assistant.",
+        "data": {
+          "access_token": "Access token",
+          "car_id": "Vehicle identifier",
+          "refresh_token": "Refresh token (optional)",
+          "vcs_app_id": "VCS app ID (optional)",
+          "is_nev": "New energy vehicle marker (optional)"
+        }
+      },
+      "reauth_confirm": {
+        "title": "Reauthenticate Changan account",
+        "description": "The account session has expired. Import a newly verified session; the SMS login flow will replace this temporary form after protocol verification.",
+        "data": {
+          "access_token": "Access token",
+          "car_id": "Vehicle identifier",
+          "refresh_token": "Refresh token (optional)",
+          "vcs_app_id": "VCS app ID (optional)",
+          "is_nev": "New energy vehicle marker (optional)"
+        }
+      }
+    },
+    "abort": {
+      "single_instance_allowed": "Only one Changan UNI-V entry is supported.",
+      "reauth_successful": "Account session updated successfully.",
+      "reconfigure_successful": "Configuration updated successfully."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "fuel_percent": {"name": "Fuel level"},
+      "remaining_range": {"name": "Remaining range"},
+      "odometer": {"name": "Odometer"},
+      "cabin_temperature": {"name": "Cabin temperature"},
+      "exterior_temperature": {"name": "Exterior temperature"},
+      "fuel_liters": {"name": "Remaining fuel"},
+      "fuel_consumption": {"name": "Fuel consumption"},
+      "battery_voltage": {"name": "12 V battery voltage"},
+      "tire_pressure_fl": {"name": "Front-left tire pressure"},
+      "tire_pressure_fr": {"name": "Front-right tire pressure"},
+      "tire_pressure_rl": {"name": "Rear-left tire pressure"},
+      "tire_pressure_rr": {"name": "Rear-right tire pressure"},
+      "vehicle_reported_at": {"name": "Vehicle reported time"}
+    },
+    "binary_sensor": {
+      "authentication_required": {"name": "Account authentication required"},
+      "engine_running": {"name": "Engine running"},
+      "air_conditioner": {"name": "Air conditioner"}
+    }
+  }
+}
