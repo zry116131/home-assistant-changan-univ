@@ -25,3 +25,7 @@
 3. 在“设置 → 设备与服务 → 添加集成”中搜索 `Changan UNI-V`。
 
 支持 Home Assistant 2026.5 及以上版本。
+
+## 许可证
+
+MIT License。

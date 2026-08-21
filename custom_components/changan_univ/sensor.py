@@ -6,7 +6,12 @@ from collections.abc import Callable
 from dataclasses import dataclass
 from typing import Any
 
-from homeassistant.components.sensor import SensorDeviceClass, SensorEntity, SensorStateClass
+from homeassistant.components.sensor import (
+    SensorDeviceClass,
+    SensorEntity,
+    SensorEntityDescription,
+    SensorStateClass,
+)
 from homeassistant.const import (
     PERCENTAGE,
     UnitOfElectricPotential,
@@ -24,14 +29,8 @@ from .models import VehicleStatus
 
 
 @dataclass(frozen=True, kw_only=True)
-class ChanganSensorDescription:
-    key: str
-    translation_key: str
+class ChanganSensorDescription(SensorEntityDescription):
     value_fn: Callable[[VehicleStatus], Any]
-    native_unit: str | None = None
-    device_class: SensorDeviceClass | None = None
-    state_class: SensorStateClass | None = SensorStateClass.MEASUREMENT
-    suggested_precision: int | None = None
 
 
 SENSORS: tuple[ChanganSensorDescription, ...] = (
@@ -39,96 +38,107 @@ SENSORS: tuple[ChanganSensorDescription, ...] = (
         key="fuel_percent",
         translation_key="fuel_percent",
         value_fn=lambda s: s.fuel_percent,
-        native_unit=PERCENTAGE,
-        suggested_precision=0,
+        native_unit_of_measurement=PERCENTAGE,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
     ),
     ChanganSensorDescription(
         key="remaining_range",
         translation_key="remaining_range",
         value_fn=lambda s: s.remaining_range_km,
-        native_unit=UnitOfLength.KILOMETERS,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
-        suggested_precision=0,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
     ),
     ChanganSensorDescription(
         key="odometer",
         translation_key="odometer",
         value_fn=lambda s: s.odometer_km,
-        native_unit=UnitOfLength.KILOMETERS,
+        native_unit_of_measurement=UnitOfLength.KILOMETERS,
         device_class=SensorDeviceClass.DISTANCE,
         state_class=SensorStateClass.TOTAL_INCREASING,
-        suggested_precision=1,
+        suggested_display_precision=1,
     ),
     ChanganSensorDescription(
         key="cabin_temperature",
         translation_key="cabin_temperature",
         value_fn=lambda s: s.cabin_temperature_c,
-        native_unit=UnitOfTemperature.CELSIUS,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
-        suggested_precision=1,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
     ),
     ChanganSensorDescription(
         key="exterior_temperature",
         translation_key="exterior_temperature",
         value_fn=lambda s: s.exterior_temperature_c,
-        native_unit=UnitOfTemperature.CELSIUS,
+        native_unit_of_measurement=UnitOfTemperature.CELSIUS,
         device_class=SensorDeviceClass.TEMPERATURE,
-        suggested_precision=1,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
     ),
     ChanganSensorDescription(
         key="fuel_liters",
         translation_key="fuel_liters",
         value_fn=lambda s: s.fuel_liters,
-        native_unit=UnitOfVolume.LITERS,
+        native_unit_of_measurement=UnitOfVolume.LITERS,
         device_class=SensorDeviceClass.VOLUME,
-        suggested_precision=1,
+        state_class=None,
+        suggested_display_precision=1,
     ),
     ChanganSensorDescription(
         key="fuel_consumption",
         translation_key="fuel_consumption",
         value_fn=lambda s: s.fuel_consumption_l_per_100km,
-        native_unit="L/100 km",
-        suggested_precision=1,
+        native_unit_of_measurement="L/100 km",
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
     ),
     ChanganSensorDescription(
         key="battery_voltage",
         translation_key="battery_voltage",
         value_fn=lambda s: s.battery_voltage,
-        native_unit=UnitOfElectricPotential.VOLT,
+        native_unit_of_measurement=UnitOfElectricPotential.VOLT,
         device_class=SensorDeviceClass.VOLTAGE,
-        suggested_precision=1,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=1,
     ),
     ChanganSensorDescription(
         key="tire_pressure_fl",
         translation_key="tire_pressure_fl",
         value_fn=lambda s: s.tire_pressure_fl_kpa,
-        native_unit=UnitOfPressure.KPA,
+        native_unit_of_measurement=UnitOfPressure.KPA,
         device_class=SensorDeviceClass.PRESSURE,
-        suggested_precision=0,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
     ),
     ChanganSensorDescription(
         key="tire_pressure_fr",
         translation_key="tire_pressure_fr",
         value_fn=lambda s: s.tire_pressure_fr_kpa,
-        native_unit=UnitOfPressure.KPA,
+        native_unit_of_measurement=UnitOfPressure.KPA,
         device_class=SensorDeviceClass.PRESSURE,
-        suggested_precision=0,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
     ),
     ChanganSensorDescription(
         key="tire_pressure_rl",
         translation_key="tire_pressure_rl",
         value_fn=lambda s: s.tire_pressure_rl_kpa,
-        native_unit=UnitOfPressure.KPA,
+        native_unit_of_measurement=UnitOfPressure.KPA,
         device_class=SensorDeviceClass.PRESSURE,
-        suggested_precision=0,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
     ),
     ChanganSensorDescription(
         key="tire_pressure_rr",
         translation_key="tire_pressure_rr",
         value_fn=lambda s: s.tire_pressure_rr_kpa,
-        native_unit=UnitOfPressure.KPA,
+        native_unit_of_measurement=UnitOfPressure.KPA,
         device_class=SensorDeviceClass.PRESSURE,
-        suggested_precision=0,
+        state_class=SensorStateClass.MEASUREMENT,
+        suggested_display_precision=0,
     ),
     ChanganSensorDescription(
         key="vehicle_reported_at",
@@ -154,11 +164,6 @@ class ChanganSensor(ChanganEntity, SensorEntity):
     def __init__(self, entry, coordinator, description: ChanganSensorDescription) -> None:
         super().__init__(entry, coordinator, description.key)
         self.entity_description = description
-        self._attr_translation_key = description.translation_key
-        self._attr_native_unit_of_measurement = description.native_unit
-        self._attr_device_class = description.device_class
-        self._attr_state_class = description.state_class
-        self._attr_suggested_display_precision = description.suggested_precision
 
     @property
     def native_value(self) -> Any:

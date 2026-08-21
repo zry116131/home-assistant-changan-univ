@@ -5,7 +5,11 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from homeassistant.components.binary_sensor import BinarySensorDeviceClass, BinarySensorEntity
+from homeassistant.components.binary_sensor import (
+    BinarySensorDeviceClass,
+    BinarySensorEntity,
+    BinarySensorEntityDescription,
+)
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddConfigEntryEntitiesCallback
 
@@ -15,11 +19,8 @@ from .models import VehicleStatus
 
 
 @dataclass(frozen=True, kw_only=True)
-class ChanganBinarySensorDescription:
-    key: str
-    translation_key: str
+class ChanganBinarySensorDescription(BinarySensorEntityDescription):
     value_fn: Callable[[VehicleStatus], bool | None]
-    device_class: BinarySensorDeviceClass | None = None
 
 
 BINARY_SENSORS: tuple[ChanganBinarySensorDescription, ...] = (
@@ -70,8 +71,6 @@ class ChanganStatusBinarySensor(ChanganEntity, BinarySensorEntity):
     def __init__(self, entry, description: ChanganBinarySensorDescription) -> None:
         super().__init__(entry, entry.runtime_data.coordinator, description.key)
         self.entity_description = description
-        self._attr_translation_key = description.translation_key
-        self._attr_device_class = description.device_class
 
     @property
     def is_on(self) -> bool | None:

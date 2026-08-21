@@ -145,7 +145,7 @@ def parse_status(payload: Any) -> VehicleStatus:
     if not isinstance(payload, dict):
         raise ChanganApiError("Changan status response is invalid")
     if payload.get("success") is False or not isinstance(payload.get("data"), dict):
-        if payload.get("code") in {2, 401, 403, 1001, 2010}:
+        if str(payload.get("code")) in {"2", "401", "403", "1001", "2010"}:
             raise ChanganAuthError("Changan account authentication is required")
         raise ChanganApiError("Changan status response was rejected")
 

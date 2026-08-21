@@ -1,6 +1,6 @@
 {
   "name": "Changan UNI-V",
   "country": ["CN"],
-  "homeassistant": "2026.5.0",
+  "homeassistant": "2026.5.2",
   "render_readme": true
 }

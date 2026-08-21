@@ -23,7 +23,13 @@ def main() -> None:
     draw.ellipse((305, 306, 375, 376), fill=(12, 25, 45, 255))
     draw.ellipse((152, 321, 192, 361), fill=(180, 212, 245, 255))
     draw.ellipse((320, 321, 360, 361), fill=(180, 212, 245, 255))
-    output = Path(__file__).resolve().parents[1] / "brand" / "icon.png"
+    output = (
+        Path(__file__).resolve().parents[1]
+        / "custom_components"
+        / "changan_univ"
+        / "brand"
+        / "icon.png"
+    )
     output.parent.mkdir(parents=True, exist_ok=True)
     image.save(output, format="PNG", optimize=True)
 
