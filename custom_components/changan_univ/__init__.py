@@ -6,12 +6,13 @@ from dataclasses import dataclass
 
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
+from homeassistant.helpers import config_validation as cv
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
 from homeassistant.helpers.typing import ConfigType
 
 from .api import ChanganApi
 from .captcha import async_register_captcha_view
-from .const import CONF_ACCESS_TOKEN, CONF_CAR_ID, PLATFORMS
+from .const import CONF_ACCESS_TOKEN, CONF_CAR_ID, DOMAIN, PLATFORMS
 from .coordinator import ChanganCoordinator
 
 
@@ -24,6 +25,7 @@ class ChanganRuntimeData:
 
 
 ChanganConfigEntry = ConfigEntry[ChanganRuntimeData]
+CONFIG_SCHEMA = cv.config_entry_only_config_schema(DOMAIN)
 
 
 async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
