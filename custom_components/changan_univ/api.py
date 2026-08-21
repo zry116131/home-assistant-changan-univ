@@ -72,7 +72,7 @@ class ChanganApi:
         }
         headers = {
             "Accept": "application/json",
-            "User-Agent": "Home-Assistant-Changan-UNI-V/0.3.0",
+            "User-Agent": "Home-Assistant-Changan-UNI-V/0.4.0",
         }
         if self._config.get(CONF_VCS_APP_ID):
             headers["vcs-app-id"] = self._config[CONF_VCS_APP_ID]
@@ -104,7 +104,7 @@ class ChanganApi:
         headers = {
             "Accept": "application/json",
             "response-form": "json",
-            "User-Agent": "Home-Assistant-Changan-UNI-V/0.3.0",
+            "User-Agent": "Home-Assistant-Changan-UNI-V/0.4.0",
         }
         try:
             async with self._session.get(

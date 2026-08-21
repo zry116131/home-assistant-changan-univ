@@ -4,38 +4,67 @@
     "step": {
       "user": {
         "title": "设置长安 UNI-V",
-        "description": "先安装只读车辆实体。账户认证将在下一阶段完成，当前不会启用任何车辆控制。",
+        "description": "创建只读车辆实体。创建后请在集成菜单中选择“重新配置 → 账户认证”完成短信登录；远程车辆控制保持关闭。",
         "data": {
           "display_name": "车辆名称",
           "scan_interval": "云端轮询间隔（秒）"
         }
       },
       "reconfigure": {
-        "title": "导入已验证的账户会话",
-        "description": "这是临时验证入口。请勿分享这些内容，也不要粘贴到自有 Home Assistant 以外的任何位置。",
+        "title": "重新配置长安 UNI-V",
+        "menu_options": {
+          "reconfigure_account": "账户认证",
+          "reconfigure_settings": "轮询和名称设置"
+        }
+      },
+      "reconfigure_account": {
+        "title": "认证引力域账户",
+        "description": "手机号只在本次流程内用于获取验证码，认证成功后不会保存。",
         "data": {
-          "access_token": "访问令牌",
-          "car_id": "车辆标识",
-          "refresh_token": "刷新令牌（可选）",
-          "vcs_app_id": "VCS 应用标识（可选）",
-          "is_nev": "新能源车标记（可选）"
+          "phone": "引力域账户手机号"
+        }
+      },
+      "reconfigure_settings": {
+        "title": "修改只读集成设置",
+        "data": {
+          "display_name": "车辆名称",
+          "scan_interval": "云端轮询间隔（秒）"
         }
       },
       "reauth_confirm": {
-        "title": "重新认证长安账户",
-        "description": "账户会话已经失效。请导入新验证的会话；完成协议验证后，这里会替换为图片验证码和短信验证码登录流程。",
+        "title": "重新认证引力域账户",
+        "description": "账户会话已经失效。手机号只在本次流程内使用，认证成功后不会保存。",
         "data": {
-          "access_token": "访问令牌",
-          "car_id": "车辆标识",
-          "refresh_token": "刷新令牌（可选）",
-          "vcs_app_id": "VCS 应用标识（可选）",
-          "is_nev": "新能源车标记（可选）"
+          "phone": "引力域账户手机号"
+        }
+      },
+      "graphics_captcha": {
+        "title": "输入图片验证码",
+        "description": "请填写图片中的 4 位数字。\n\n![图片验证码]({captcha_url})",
+        "data": {
+          "graphics_code": "图片验证码"
+        }
+      },
+      "sms_code": {
+        "title": "输入短信验证码",
+        "description": "验证码只用于本次登录，不会写入 Home Assistant 配置或日志。",
+        "data": {
+          "sms_code": "短信验证码"
         }
       }
     },
+    "error": {
+      "cannot_connect": "无法连接或验证长安服务，请稍后重试。",
+      "invalid_phone": "请输入正确的 11 位中国大陆手机号。",
+      "invalid_graphics_code": "图片验证码无效或已过期，请重新输入。",
+      "invalid_sms_code": "短信验证码无效或已过期，请重新输入。",
+      "rate_limited": "请求过于频繁，请稍后再试。",
+      "request_rejected": "长安服务拒绝了请求，请稍后重试。"
+    },
     "abort": {
+      "authentication_flow_expired": "认证流程已经过期，请重新开始。",
       "single_instance_allowed": "仅支持一个长安 UNI-V 配置。",
-      "reauth_successful": "账户会话已成功更新。",
+      "reauth_successful": "账户认证已成功更新。",
       "reconfigure_successful": "配置已成功更新。"
     }
   },

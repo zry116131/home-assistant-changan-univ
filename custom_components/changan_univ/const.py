@@ -8,6 +8,7 @@ DOMAIN: Final = "changan_univ"
 
 CONF_ACCESS_TOKEN: Final = "access_token"
 CONF_CAR_ID: Final = "car_id"
+CONF_CLIENT_FINGERPRINT: Final = "client_fingerprint"
 CONF_DISPLAY_NAME: Final = "display_name"
 CONF_IS_NEV: Final = "is_nev"
 CONF_REFRESH_TOKEN: Final = "refresh_token"
@@ -16,6 +17,8 @@ CONF_VCS_APP_ID: Final = "vcs_app_id"
 
 DEFAULT_DISPLAY_NAME: Final = "长安 UNI-V"
 DEFAULT_SCAN_INTERVAL: Final = 120
+DEFAULT_IS_NEV: Final = "0"
+DEFAULT_VCS_APP_ID: Final = "inCall"
 MIN_SCAN_INTERVAL: Final = 30
 MAX_SCAN_INTERVAL: Final = 600
 

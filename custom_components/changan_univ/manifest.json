@@ -3,11 +3,12 @@
   "name": "Changan UNI-V",
   "codeowners": ["@zry116131"],
   "config_flow": true,
+  "dependencies": ["http"],
   "documentation": "https://github.com/zry116131/home-assistant-changan-univ",
   "integration_type": "hub",
   "iot_class": "cloud_polling",
   "issue_tracker": "https://github.com/zry116131/home-assistant-changan-univ/issues",
   "requirements": [],
   "single_config_entry": true,
-  "version": "0.3.0"
+  "version": "0.4.0"
 }

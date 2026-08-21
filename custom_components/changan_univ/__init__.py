@@ -7,8 +7,10 @@ from dataclasses import dataclass
 from homeassistant.config_entries import ConfigEntry
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.aiohttp_client import async_get_clientsession
+from homeassistant.helpers.typing import ConfigType
 
 from .api import ChanganApi
+from .captcha import async_register_captcha_view
 from .const import CONF_ACCESS_TOKEN, CONF_CAR_ID, PLATFORMS
 from .coordinator import ChanganCoordinator
 
@@ -24,8 +26,16 @@ class ChanganRuntimeData:
 ChanganConfigEntry = ConfigEntry[ChanganRuntimeData]
 
 
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Set up the integration-level ephemeral captcha view."""
+    del config
+    async_register_captcha_view(hass)
+    return True
+
+
 async def async_setup_entry(hass: HomeAssistant, entry: ChanganConfigEntry) -> bool:
     """Set up Changan UNI-V from a config entry."""
+    async_register_captcha_view(hass)
 
     def _session_updated(updated: dict) -> None:
         hass.config_entries.async_update_entry(entry, data=updated)
