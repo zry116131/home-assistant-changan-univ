@@ -16,11 +16,12 @@ CONF_SCAN_INTERVAL: Final = "scan_interval"
 CONF_VCS_APP_ID: Final = "vcs_app_id"
 
 DEFAULT_DISPLAY_NAME: Final = "长安 UNI-V"
-DEFAULT_SCAN_INTERVAL: Final = 120
+DEFAULT_SCAN_INTERVAL: Final = 500
 DEFAULT_IS_NEV: Final = "0"
 DEFAULT_VCS_APP_ID: Final = "inCall"
-MIN_SCAN_INTERVAL: Final = 30
+MIN_SCAN_INTERVAL: Final = 300
 MAX_SCAN_INTERVAL: Final = 600
+USER_AGENT: Final = "Home-Assistant-Changan-UNI-V/0.4.1"
 
 PLATFORMS: Final = ["binary_sensor", "sensor"]
 

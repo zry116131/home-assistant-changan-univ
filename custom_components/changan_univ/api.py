@@ -14,6 +14,7 @@ from .const import (
     CONF_IS_NEV,
     CONF_REFRESH_TOKEN,
     CONF_VCS_APP_ID,
+    USER_AGENT,
 )
 from .models import VehicleStatus
 
@@ -72,7 +73,7 @@ class ChanganApi:
         }
         headers = {
             "Accept": "application/json",
-            "User-Agent": "Home-Assistant-Changan-UNI-V/0.4.0",
+            "User-Agent": USER_AGENT,
         }
         if self._config.get(CONF_VCS_APP_ID):
             headers["vcs-app-id"] = self._config[CONF_VCS_APP_ID]
@@ -104,7 +105,7 @@ class ChanganApi:
         headers = {
             "Accept": "application/json",
             "response-form": "json",
-            "User-Agent": "Home-Assistant-Changan-UNI-V/0.4.0",
+            "User-Agent": USER_AGENT,
         }
         try:
             async with self._session.get(

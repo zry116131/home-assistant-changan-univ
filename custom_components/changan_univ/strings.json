@@ -4,10 +4,10 @@
     "step": {
       "user": {
         "title": "Set up Changan UNI-V",
-        "description": "Create the read-only vehicle entities. Then choose Reconfigure → Account authentication to complete SMS login. Remote vehicle control remains disabled.",
+        "description": "Create the read-only vehicle entities. For service stability, use a polling interval of at least 300 seconds; the default is 500 seconds. Then choose Reconfigure → Account authentication to complete SMS login. Remote vehicle control remains disabled.",
         "data": {
           "display_name": "Vehicle name",
-          "scan_interval": "Cloud polling interval (seconds)"
+          "scan_interval": "Cloud polling interval (seconds, 300–600)"
         }
       },
       "reconfigure": {
@@ -26,9 +26,10 @@
       },
       "reconfigure_settings": {
         "title": "Change read-only integration settings",
+        "description": "For service stability, use an interval of at least 300 seconds. The default is 500 seconds.",
         "data": {
           "display_name": "Vehicle name",
-          "scan_interval": "Cloud polling interval (seconds)"
+          "scan_interval": "Cloud polling interval (seconds, 300–600)"
         }
       },
       "reauth_confirm": {

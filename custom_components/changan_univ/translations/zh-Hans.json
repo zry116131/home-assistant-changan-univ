@@ -4,10 +4,10 @@
     "step": {
       "user": {
         "title": "设置长安 UNI-V",
-        "description": "创建只读车辆实体。创建后请在集成菜单中选择“重新配置 → 账户认证”完成短信登录；远程车辆控制保持关闭。",
+        "description": "创建只读车辆实体。为保证服务稳定性，建议轮询间隔至少为 300 秒，默认值为 500 秒。创建后请在集成菜单中选择“重新配置 → 账户认证”完成短信登录；远程车辆控制保持关闭。",
         "data": {
           "display_name": "车辆名称",
-          "scan_interval": "云端轮询间隔（秒）"
+          "scan_interval": "云端轮询间隔（秒，300～600）"
         }
       },
       "reconfigure": {
@@ -26,9 +26,10 @@
       },
       "reconfigure_settings": {
         "title": "修改只读集成设置",
+        "description": "为保证服务稳定性，轮询间隔应至少为 300 秒，默认值为 500 秒。",
         "data": {
           "display_name": "车辆名称",
-          "scan_interval": "云端轮询间隔（秒）"
+          "scan_interval": "云端轮询间隔（秒，300～600）"
         }
       },
       "reauth_confirm": {

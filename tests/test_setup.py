@@ -11,6 +11,7 @@ from homeassistant.helpers import entity_registry as er
 from homeassistant.helpers.translation import async_get_translations
 from pytest_homeassistant_custom_component.common import MockConfigEntry
 
+from custom_components.changan_univ import async_migrate_entry
 from custom_components.changan_univ.api import ChanganAuthError
 from custom_components.changan_univ.const import (
     CONF_ACCESS_TOKEN,
@@ -18,7 +19,10 @@ from custom_components.changan_univ.const import (
     CONF_DISPLAY_NAME,
     CONF_SCAN_INTERVAL,
     DEFAULT_DISPLAY_NAME,
+    DEFAULT_SCAN_INTERVAL,
     DOMAIN,
+    MAX_SCAN_INTERVAL,
+    MIN_SCAN_INTERVAL,
 )
 from custom_components.changan_univ.models import VehicleStatus
 
@@ -26,7 +30,7 @@ from custom_components.changan_univ.models import VehicleStatus
 def _entry_data(configured: bool) -> dict[str, str | int]:
     data: dict[str, str | int] = {
         CONF_DISPLAY_NAME: DEFAULT_DISPLAY_NAME,
-        CONF_SCAN_INTERVAL: 120,
+        CONF_SCAN_INTERVAL: 500,
     }
     if configured:
         data.update(
@@ -56,6 +60,58 @@ def _states_by_unique_suffix(hass: HomeAssistant, entry: MockConfigEntry) -> dic
         assert state is not None
         result[registry_entry.unique_id[17:]] = state.state
     return result
+
+
+async def test_legacy_high_frequency_polling_migrates_to_safe_default(
+    hass: HomeAssistant,
+) -> None:
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_DISPLAY_NAME,
+        unique_id=DOMAIN,
+        version=1,
+        data={CONF_DISPLAY_NAME: DEFAULT_DISPLAY_NAME, CONF_SCAN_INTERVAL: 120},
+    )
+    entry.add_to_hass(hass)
+
+    assert await async_migrate_entry(hass, entry)
+
+    assert entry.version == 2
+    assert entry.data[CONF_SCAN_INTERVAL] == DEFAULT_SCAN_INTERVAL == 500
+
+
+async def test_migration_preserves_supported_polling_interval(hass: HomeAssistant) -> None:
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_DISPLAY_NAME,
+        unique_id=DOMAIN,
+        version=1,
+        data={CONF_DISPLAY_NAME: DEFAULT_DISPLAY_NAME, CONF_SCAN_INTERVAL: 600},
+    )
+    entry.add_to_hass(hass)
+
+    assert await async_migrate_entry(hass, entry)
+
+    assert entry.version == 2
+    assert entry.data[CONF_SCAN_INTERVAL] == 600
+    assert MIN_SCAN_INTERVAL == 300
+    assert MAX_SCAN_INTERVAL == 600
+
+
+async def test_migration_replaces_invalid_polling_interval(hass: HomeAssistant) -> None:
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        title=DEFAULT_DISPLAY_NAME,
+        unique_id=DOMAIN,
+        version=1,
+        data={CONF_DISPLAY_NAME: DEFAULT_DISPLAY_NAME, CONF_SCAN_INTERVAL: "invalid"},
+    )
+    entry.add_to_hass(hass)
+
+    assert await async_migrate_entry(hass, entry)
+
+    assert entry.version == 2
+    assert entry.data[CONF_SCAN_INTERVAL] == DEFAULT_SCAN_INTERVAL
 
 
 async def test_pending_setup_creates_only_safe_unavailable_entities(

@@ -73,7 +73,7 @@ def _phone_text() -> selector.TextSelector:
 class ChanganConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle Changan UNI-V setup and SMS reauthentication."""
 
-    VERSION = 1
+    VERSION = 2
 
     def __init__(self) -> None:
         self._auth_client: ChanganAuthClient | None = None

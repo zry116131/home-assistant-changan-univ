@@ -4,6 +4,8 @@ from __future__ import annotations
 
 from unittest.mock import AsyncMock, patch
 
+import pytest
+import voluptuous as vol
 from homeassistant.config_entries import SOURCE_REAUTH, SOURCE_RECONFIGURE, SOURCE_USER
 from homeassistant.core import HomeAssistant
 from homeassistant.data_entry_flow import FlowResultType
@@ -35,7 +37,7 @@ def _entry() -> MockConfigEntry:
         unique_id=DOMAIN,
         data={
             CONF_DISPLAY_NAME: DEFAULT_DISPLAY_NAME,
-            CONF_SCAN_INTERVAL: 120,
+            CONF_SCAN_INTERVAL: 500,
             CONF_ACCESS_TOKEN: "stored-access-must-not-be-returned",
             CONF_REFRESH_TOKEN: "stored-refresh-must-not-be-returned",
             CONF_CAR_ID: "stored-car-id-must-not-be-returned",
@@ -50,12 +52,20 @@ async def test_user_flow_creates_pending_read_only_entry(hass: HomeAssistant) ->
     )
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "user"
+    scan_marker = next(
+        marker for marker in result["data_schema"].schema if marker.schema == CONF_SCAN_INTERVAL
+    )
+    assert scan_marker.default() == 500
+    scan_validator = result["data_schema"].schema[scan_marker]
+    assert scan_validator(300) == 300
+    with pytest.raises(vol.Invalid):
+        scan_validator(299)
 
     result = await hass.config_entries.flow.async_configure(
         result["flow_id"],
         {
             CONF_DISPLAY_NAME: DEFAULT_DISPLAY_NAME,
-            CONF_SCAN_INTERVAL: 120,
+            CONF_SCAN_INTERVAL: 500,
         },
     )
 
@@ -63,7 +73,7 @@ async def test_user_flow_creates_pending_read_only_entry(hass: HomeAssistant) ->
     assert result["title"] == DEFAULT_DISPLAY_NAME
     assert result["data"] == {
         CONF_DISPLAY_NAME: DEFAULT_DISPLAY_NAME,
-        CONF_SCAN_INTERVAL: 120,
+        CONF_SCAN_INTERVAL: 500,
     }
     assert CONF_ACCESS_TOKEN not in result["data"]
     assert CONF_CAR_ID not in result["data"]

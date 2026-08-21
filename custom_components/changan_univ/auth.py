@@ -22,6 +22,8 @@ from cryptography.hazmat.primitives.asymmetric import padding as asymmetric_padd
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPublicKey
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
 
+from .const import USER_AGENT
+
 API_ROOT = "https://api.uni.changan.com.cn"
 APP_CODE = "ca-boot-ui-yunli-app"
 APP_VERSION = "3.1.0"
@@ -268,7 +270,7 @@ class ChanganAuthClient:
             "operatorName": "",
             "networkState": "WIFI",
             "x-tenant-app": APP_CODE,
-            "User-Agent": "Home-Assistant-Changan-UNI-V/0.4.0",
+            "User-Agent": USER_AGENT,
         }
 
 

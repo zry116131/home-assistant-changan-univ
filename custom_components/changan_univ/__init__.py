@@ -12,7 +12,16 @@ from homeassistant.helpers.typing import ConfigType
 
 from .api import ChanganApi
 from .captcha import async_register_captcha_view
-from .const import CONF_ACCESS_TOKEN, CONF_CAR_ID, DOMAIN, PLATFORMS
+from .const import (
+    CONF_ACCESS_TOKEN,
+    CONF_CAR_ID,
+    CONF_SCAN_INTERVAL,
+    DEFAULT_SCAN_INTERVAL,
+    DOMAIN,
+    MAX_SCAN_INTERVAL,
+    MIN_SCAN_INTERVAL,
+    PLATFORMS,
+)
 from .coordinator import ChanganCoordinator
 
 
@@ -32,6 +41,23 @@ async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
     """Set up the integration-level ephemeral captcha view."""
     del config
     async_register_captcha_view(hass)
+    return True
+
+
+async def async_migrate_entry(hass: HomeAssistant, entry: ChanganConfigEntry) -> bool:
+    """Move legacy high-frequency polling entries to the safe default."""
+    if entry.version >= 2:
+        return True
+
+    updated = dict(entry.data)
+    try:
+        scan_interval = int(updated.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL))
+    except (TypeError, ValueError):
+        scan_interval = None
+    if scan_interval is None or not MIN_SCAN_INTERVAL <= scan_interval <= MAX_SCAN_INTERVAL:
+        updated[CONF_SCAN_INTERVAL] = DEFAULT_SCAN_INTERVAL
+
+    hass.config_entries.async_update_entry(entry, data=updated, version=2)
     return True
 
 
